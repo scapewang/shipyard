@@ -130,6 +130,12 @@
                                         <div class="description">{{ vm.container.Config.Domainname || "N/A" }}</div>
                                     </div>
                                 </div>
+                                <div class="column">
+                                    <div class="content">
+                                        <span class="header"><b>Ip Address</b></span>
+                                        <div class="description">{{ vm.container.NetworkSettings.IPAddress || "N/A" }}</div>
+                                    </div>
+                                </div>
                             </div>
                             <h4 class="ui dividing header">Port Configuration</h4>
                             <div class="ui divided list" ng-show="vm.container.NetworkSettings.Ports"> 
