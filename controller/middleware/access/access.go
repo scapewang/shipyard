@@ -136,7 +136,7 @@ func (a *AccessRequired) checkOwnership(acct *auth.Account, path string, method 
 	}
 
 	// check the owner of the container
-	if containerInfo.Config.Labels['owner'] == acct.Username {
+	if containerInfo.Config.Labels["owner"] == acct.Username {
 		return true
 	}
 
