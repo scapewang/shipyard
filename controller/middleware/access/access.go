@@ -115,8 +115,8 @@ func (a *AccessRequired) checkOwnership(acct *auth.Account, path string, method 
 	}
 
 	// check roles
-	container_pattern := regexp.Compile("/containers/([0-9a-z]{64})(/(.+))?")
-	if container_pattern == nil {
+	container_pattern,err := regexp.Compile("/containers/([0-9a-z]{64})(/(.+))?")
+	if err != nil {
 		return false
 	}
 
