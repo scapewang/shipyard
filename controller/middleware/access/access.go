@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+	"regexp"
 
 	"github.com/Sirupsen/logrus"
 	"github.com/shipyard/shipyard/auth"
@@ -106,7 +107,49 @@ func (a *AccessRequired) checkRole(role string, path, method string) bool {
 
 	return false
 }
+
+func (a *AccessRequired) checkOwnership(acct *auth.Account, path string, method string) bool {
+	// we allow every login user create containers
+	if path == "/containers/create" {
+		return true
+	}
+
+	// check roles
+	container_pattern,err := regexp.Compile("/containers/([0-9a-z]{64})(/(.+))?")
+	if err != nil {
+		return false
+	}
+
+	// check if it is an container operation
+	matches := container_pattern.FindStringSubmatch(path)
+	if matches == nil || len(matches) < 4 {
+		return false
+	}
+
+	// get the container id
+	containerId := matches[1]
+
+	// get container info from client
+	containerInfo,err := a.manager.Container(containerId)
+	if err != nil {
+		return false
+	}
+
+	// check the owner of the container
+	if containerInfo.Config.Labels["owner"] == acct.Username {
+		return true
+	}
+
+	return false
+}
+
 func (a *AccessRequired) checkAccess(acct *auth.Account, path string, method string) bool {
+	
+	fmt.Println("User "+acct.Username+" "+method+" path:"+path)
+	if a.checkOwnership(acct, path, method) {
+		return true
+	}
+
 	// check roles
 	for _, role := range acct.Roles {
 		// check acls

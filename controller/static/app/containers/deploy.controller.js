@@ -5,8 +5,8 @@
         .module('shipyard.containers')
         .controller('ContainerDeployController', ContainerDeployController);
 
-    ContainerDeployController.$inject = ['containers', '$http', '$state'];
-    function ContainerDeployController(containers, $http, $state) {
+    ContainerDeployController.$inject = ['containers', '$http', '$state', '$rootScope'];
+    function ContainerDeployController(containers, $http, $state, $rootScope) {
         var vm = this;
         vm.containers = containers;
         vm.deployImages = [];
@@ -75,6 +75,9 @@
             Env: [],
             AttachStdin: false,
             Tty: true,
+            Labels:{
+                'owner':$rootScope.username,
+            },
         };
 
         vm.deploy = deploy;
