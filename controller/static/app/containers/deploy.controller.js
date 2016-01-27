@@ -5,8 +5,8 @@
         .module('shipyard.containers')
         .controller('ContainerDeployController', ContainerDeployController);
 
-    ContainerDeployController.$inject = ['containers', '$http', '$state', '$rootScope'];
-    function ContainerDeployController(containers, $http, $state, $rootScope) {
+    ContainerDeployController.$inject = ['containers', 'ImagesService', '$http', '$state', '$rootScope'];
+    function ContainerDeployController(containers, ImagesService, $http, $state, $rootScope) {
         var vm = this;
         vm.containers = containers;
         vm.deployImages = [];
@@ -93,6 +93,13 @@
         vm.removePort = removePort;
         vm.pushDns = pushDns;
         vm.removeDns = removeDns;
+
+        vm.images = [];
+        ImagesService.list().then(function(data){
+            vm.images = data;
+        }, function(err){
+            // do nothing
+        })
 
         function pushConstraint() {
             var constraint = {'ConstraintName': vm.constraintName, 'ConstraintValue': vm.constraintValue, 'ConstraintRule': vm.constraintRule};

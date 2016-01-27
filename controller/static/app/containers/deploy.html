@@ -33,10 +33,10 @@
                                         </div>
                                     </label>
                                     <div class="ui corner labeled input">
-                                        <input name="image" class="input" type="text" ng-model="vm.request.Image" placeholder="Image"></input>
-                                        <div class="ui corner label">
-                                            <i class="asterisk icon"></i>
-                                        </div>
+                                        <select name="Container name" ng-model="vm.request.Image" class="ui search fluid dropdown">
+                                            <option value="">Container Name</option>
+                                            <option ng-repeat="image in vm.images" value="{{image.RepoTags[0]}}">{{image.RepoTags[0]}}</option>
+                                        </select>
                                     </div>
                                 </div>
 
